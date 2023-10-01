@@ -28,4 +28,11 @@ public class StringCalculatorTest {
 			int numbers = calculator.add("//:\\n33\\n-33,-50:60");
 		});
 	}
+
+	@Test
+	void TestDigitsIgnore() {
+		StringCalculator calculator = new StringCalculator();
+		int oneNumber = calculator.add("//:\\n33\\n1033,7:1000\\n1001");
+		Assertions.assertEquals(40, oneNumber);
+	}
 }

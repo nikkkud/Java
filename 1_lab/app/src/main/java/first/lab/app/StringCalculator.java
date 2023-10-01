@@ -40,7 +40,9 @@ public class StringCalculator {
 					try {
 						numberInt = Integer.parseInt(numbersSplit[i]);
 						if (numberInt >= 0) {
-							sum += numberInt;
+							if (numberInt < 1000) {
+								sum += numberInt;
+							}
 						} else {
 							numberString = Integer.toString(numberInt);
 							negativeNumbers.add(numberString);
@@ -71,7 +73,10 @@ public class StringCalculator {
 					try {
 						numberInt = Integer.parseInt(numbersSplit[i]);
 						if (numberInt >= 0) {
-							sum += numberInt;
+							if (numberInt < 1000) {
+								sum += numberInt;
+							}
+
 						} else {
 							numberString = Integer.toString(numberInt);
 							negativeNumbers.add(numberString);
