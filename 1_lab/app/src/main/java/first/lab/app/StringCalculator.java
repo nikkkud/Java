@@ -1,7 +1,9 @@
 package first.lab.app;
 
 import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 public class StringCalculator {
 	int add(String numbers) {
@@ -11,6 +13,8 @@ public class StringCalculator {
 
 		int startIndex = numbers.indexOf("//");
 		int endIndex = numbers.indexOf("\\n");
+		String numberString;
+		List<String> negativeNumbers = new ArrayList<>();
 
 		if (startIndex == 0) {
 			char charDelimiter = numbers.charAt(startIndex + 2);
@@ -35,7 +39,12 @@ public class StringCalculator {
 
 					try {
 						numberInt = Integer.parseInt(numbersSplit[i]);
-						sum += numberInt;
+						if (numberInt >= 0) {
+							sum += numberInt;
+						} else {
+							numberString = Integer.toString(numberInt);
+							negativeNumbers.add(numberString);
+						}
 					} catch (NumberFormatException e) {
 						throw new IllegalArgumentException("The line contains unsupported characters!");
 					}
@@ -61,7 +70,12 @@ public class StringCalculator {
 
 					try {
 						numberInt = Integer.parseInt(numbersSplit[i]);
-						sum += numberInt;
+						if (numberInt >= 0) {
+							sum += numberInt;
+						} else {
+							numberString = Integer.toString(numberInt);
+							negativeNumbers.add(numberString);
+						}
 					} catch (NumberFormatException e) {
 						throw new IllegalArgumentException("The line contains unsupported characters!");
 					}
@@ -69,6 +83,14 @@ public class StringCalculator {
 				}
 			}
 		}
-		return sum;
+		if (negativeNumbers.size() > 1) {
+			String listDelimiter = ",";
+			String negativeNumbersString = String.join(listDelimiter, negativeNumbers);
+			throw new IllegalArgumentException(String.format("Forbidden negative numbers: %s", negativeNumbersString));
+
+		} else {
+			return sum;
+		}
+
 	}
 }

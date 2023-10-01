@@ -22,16 +22,10 @@ public class StringCalculatorTest {
 	}
 
 	@Test
-	void TestOTestWithoutOptionalDelimiter() {
+	void TestException() {
 		StringCalculator calculator = new StringCalculator();
-		int oneNumber = calculator.add("200,30\\n-200");
-		Assertions.assertEquals(30, oneNumber);
-	}
-
-	@Test
-	void TestWithOptionalDelimiter() {
-		StringCalculator calculator = new StringCalculator();
-		int numbers = calculator.add("//:\\n33\\n-33,-50:60");
-		Assertions.assertEquals(10, numbers);
+		Assertions.assertThrows(IllegalArgumentException.class, () -> {
+			int numbers = calculator.add("//:\\n33\\n-33,-50:60");
+		});
 	}
 }
