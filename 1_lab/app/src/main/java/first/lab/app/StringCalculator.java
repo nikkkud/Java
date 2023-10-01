@@ -5,7 +5,7 @@ public class StringCalculator {
 		String[] numbersSplit;
 		int numberInt;
 		int sum = 0;
-		int count = 0;
+
 		numbersSplit = numbers.split(",");
 
 		if (numbersSplit.length == 0) {
@@ -18,16 +18,12 @@ public class StringCalculator {
 
 		else {
 			for (int i = 0; i < numbersSplit.length; i++) {
-				if (count < 2) {
-					try {
-						numberInt = Integer.parseInt(numbersSplit[i]);
-						sum += numberInt;
-						count++;
-					} catch (NumberFormatException e) {
-						throw new IllegalArgumentException("The line contains unsupported characters!");
-					}
-				} else {
-					return sum;
+
+				try {
+					numberInt = Integer.parseInt(numbersSplit[i]);
+					sum += numberInt;
+				} catch (NumberFormatException e) {
+					throw new IllegalArgumentException("The line contains unsupported characters!");
 				}
 
 			}

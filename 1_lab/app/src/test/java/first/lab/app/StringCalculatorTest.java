@@ -22,7 +22,7 @@ public class StringCalculatorTest {
 	@Test
 	void TestTwoNumbers() {
 		StringCalculator calculator = new StringCalculator();
-		int twoNumbers = calculator.add("11,33,100,12");
-		Assertions.assertEquals(44, twoNumbers);
+		int twoNumbers = calculator.add("11,33,-11,-30");
+		Assertions.assertEquals(3, twoNumbers);
 	}
 }

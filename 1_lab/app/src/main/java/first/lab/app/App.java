@@ -16,7 +16,7 @@ public class App {
     public static void main(String[] args) {
         System.out.println();
         Scanner line = new Scanner(System.in);
-        System.out.println("----------LAB 1, STEP 1----------");
+        System.out.println("----------LAB 1, STEP 2----------");
 
         StringCalculator calculator = new StringCalculator();
 
