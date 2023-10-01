@@ -1,15 +1,19 @@
 package first.lab.app;
 
+import java.lang.reflect.Array;
+import java.util.Arrays;
+
 public class StringCalculator {
 	int add(String numbers) {
 		String[] numbersSplit;
 		int numberInt;
 		int sum = 0;
 
+		numbers = numbers.replace("\\n", ",");
 		numbersSplit = numbers.split(",");
 
 		if (numbersSplit.length == 0) {
-			throw new IllegalArgumentException("The line contains unsupported characters or doesn't without digits!");
+			throw new IllegalArgumentException("The line contains unsupported characters or doesn't contains digits!");
 		}
 
 		else if (numbers == "") {

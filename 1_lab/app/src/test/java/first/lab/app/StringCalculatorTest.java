@@ -1,5 +1,7 @@
 package first.lab.app;
 
+import java.util.Scanner;
+
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -20,9 +22,9 @@ public class StringCalculatorTest {
 	}
 
 	@Test
-	void TestTwoNumbers() {
+	void TestNumbers() {
 		StringCalculator calculator = new StringCalculator();
-		int twoNumbers = calculator.add("11,33,-11,-30");
-		Assertions.assertEquals(3, twoNumbers);
+		int numbers = calculator.add("11,33\\n-33,-1");
+		Assertions.assertEquals(10, numbers);
 	}
 }
