@@ -1,8 +1,6 @@
 package first.lab.app;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class StringCalculator {
@@ -17,13 +15,15 @@ public class StringCalculator {
 		List<String> negativeNumbers = new ArrayList<>();
 
 		if (startIndex == 0) {
-			char charDelimiter = numbers.charAt(startIndex + 2);
-			String stringDelimiter = Character.toString(charDelimiter);
+			int firstBrackets = numbers.indexOf("[");
+			int secondBrackets = numbers.indexOf("]");
+			String delimiter = numbers.substring(firstBrackets + 1, secondBrackets);
+
 			String newLine = numbers.substring(endIndex + 2);
 
-			newLine = newLine.replace("\\n", stringDelimiter);
-			newLine = newLine.replace(",", stringDelimiter);
-			numbersSplit = newLine.split(stringDelimiter);
+			newLine = newLine.replace("\\n", ",");
+			newLine = newLine.replace(delimiter, ",");
+			numbersSplit = newLine.split(",");
 
 			if (numbersSplit.length == 0) {
 				throw new IllegalArgumentException(
@@ -88,7 +88,7 @@ public class StringCalculator {
 				}
 			}
 		}
-		if (negativeNumbers.size() > 1) {
+		if (negativeNumbers.size() >= 1) {
 			String listDelimiter = ",";
 			String negativeNumbersString = String.join(listDelimiter, negativeNumbers);
 			throw new IllegalArgumentException(String.format("Forbidden negative numbers: %s", negativeNumbersString));

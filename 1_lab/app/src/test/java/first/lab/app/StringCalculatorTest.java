@@ -35,4 +35,11 @@ public class StringCalculatorTest {
 		int oneNumber = calculator.add("//:\\n33\\n1033,7:1000\\n1001");
 		Assertions.assertEquals(40, oneNumber);
 	}
+
+	@Test
+	void TestLongDelimiter() {
+		StringCalculator calculator = new StringCalculator();
+		int oneNumber = calculator.add("//[;;;]\\n33\\n1033,7;;;1000\\n1001;;;10;;;");
+		Assertions.assertEquals(50, oneNumber);
+	}
 }
