@@ -9,27 +9,64 @@ public class StringCalculator {
 		int numberInt;
 		int sum = 0;
 
-		numbers = numbers.replace("\\n", ",");
-		numbersSplit = numbers.split(",");
+		int startIndex = numbers.indexOf("//");
+		int endIndex = numbers.indexOf("\\n");
 
-		if (numbersSplit.length == 0) {
-			throw new IllegalArgumentException("The line contains unsupported characters or doesn't contains digits!");
-		}
+		if (startIndex == 0) {
+			char charDelimiter = numbers.charAt(startIndex + 2);
+			String stringDelimiter = Character.toString(charDelimiter);
+			String newLine = numbers.substring(endIndex + 2);
 
-		else if (numbers == "") {
-			return 0;
-		}
+			newLine = newLine.replace("\\n", stringDelimiter);
+			newLine = newLine.replace(",", stringDelimiter);
+			numbersSplit = newLine.split(stringDelimiter);
 
-		else {
-			for (int i = 0; i < numbersSplit.length; i++) {
+			if (numbersSplit.length == 0) {
+				throw new IllegalArgumentException(
+						"The line contains unsupported characters or doesn't contains digits!");
+			}
 
-				try {
-					numberInt = Integer.parseInt(numbersSplit[i]);
-					sum += numberInt;
-				} catch (NumberFormatException e) {
-					throw new IllegalArgumentException("The line contains unsupported characters!");
+			else if (numbers == "") {
+				return 0;
+			}
+
+			else {
+				for (int i = 0; i < numbersSplit.length; i++) {
+
+					try {
+						numberInt = Integer.parseInt(numbersSplit[i]);
+						sum += numberInt;
+					} catch (NumberFormatException e) {
+						throw new IllegalArgumentException("The line contains unsupported characters!");
+					}
+
 				}
+			}
 
+		} else {
+			numbers = numbers.replace("\\n", ",");
+			numbersSplit = numbers.split(",");
+
+			if (numbersSplit.length == 0) {
+				throw new IllegalArgumentException(
+						"The line contains unsupported characters or doesn't contains digits!");
+			}
+
+			else if (numbers == "") {
+				return 0;
+			}
+
+			else {
+				for (int i = 0; i < numbersSplit.length; i++) {
+
+					try {
+						numberInt = Integer.parseInt(numbersSplit[i]);
+						sum += numberInt;
+					} catch (NumberFormatException e) {
+						throw new IllegalArgumentException("The line contains unsupported characters!");
+					}
+
+				}
 			}
 		}
 		return sum;

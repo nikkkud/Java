@@ -16,13 +16,13 @@ public class App {
     public static void main(String[] args) {
         System.out.println();
         Scanner line = new Scanner(System.in);
-        System.out.println("----------LAB 1, STEP 3----------");
+        System.out.println("----------LAB 1, STEP 4----------");
 
         StringCalculator calculator = new StringCalculator();
 
         System.out.print("Please, Enter line: ");
         String lineString = line.nextLine();
         int sum = calculator.add(lineString);
-        System.out.println(sum);
+        System.out.printf("Result: %d \n", sum);
     }
 }
