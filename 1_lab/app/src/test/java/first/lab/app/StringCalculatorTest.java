@@ -1,7 +1,5 @@
 package first.lab.app;
 
-import java.util.Scanner;
-
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -41,5 +39,12 @@ public class StringCalculatorTest {
 		StringCalculator calculator = new StringCalculator();
 		int oneNumber = calculator.add("//[;;;]\\n33\\n1033,7;;;1000\\n1001;;;10;;;");
 		Assertions.assertEquals(50, oneNumber);
+	}
+
+	@Test
+	void TestMultiplyLongDelimiter() {
+		StringCalculator calculator = new StringCalculator();
+		int oneNumber = calculator.add("//[;][;;;][;;]\\n33\\n1033,7;;;1000\\n1001;10;;50;;;");
+		Assertions.assertEquals(100, oneNumber);
 	}
 }

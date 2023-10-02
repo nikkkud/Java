@@ -13,16 +13,63 @@ public class StringCalculator {
 		int endIndex = numbers.indexOf("\\n");
 		String numberString;
 		List<String> negativeNumbers = new ArrayList<>();
+		List<Integer> indexFirstBrackets = new ArrayList<>();
+		List<Integer> indexSecondBrackets = new ArrayList<>();
 
 		if (startIndex == 0) {
-			int firstBrackets = numbers.indexOf("[");
-			int secondBrackets = numbers.indexOf("]");
-			String delimiter = numbers.substring(firstBrackets + 1, secondBrackets);
+
+			for (int i = 0; i < endIndex; i++) {
+				char number = numbers.charAt(i);
+				char firstCharBracket = '[';
+				char secondCharBracket = ']';
+
+				if (number == firstCharBracket) {
+					indexFirstBrackets.add(i);
+				}
+
+				else if (number == secondCharBracket) {
+					indexSecondBrackets.add(i);
+				}
+			}
+
+			boolean flag = false;
+			int var1;
+			int var2;
+
+			while (!flag) {
+				flag = true;
+				for (int i = 0; i < indexFirstBrackets.size() - 1; i++) {
+					int firstOdd = indexSecondBrackets.get(i) - indexFirstBrackets.get(i);
+					int secondOdd = indexSecondBrackets.get(i + 1) - indexFirstBrackets.get(i + 1);
+					if (firstOdd < secondOdd) {
+
+						var1 = indexFirstBrackets.get(i);
+						var2 = indexSecondBrackets.get(i);
+
+						indexFirstBrackets.set(i, indexFirstBrackets.get(i + 1));
+						indexFirstBrackets.set(i + 1, var1);
+
+						indexSecondBrackets.set(i, indexSecondBrackets.get(i + 1));
+						indexSecondBrackets.set(i + 1, var2);
+
+						flag = false;
+					}
+				}
+			}
 
 			String newLine = numbers.substring(endIndex + 2);
 
+			for (int i = 0; i < indexFirstBrackets.size(); i++) {
+				int indexFirstBracket = indexFirstBrackets.get(i);
+				int indexSecondBracket = indexSecondBrackets.get(i);
+				String delimiter;
+
+				delimiter = numbers.substring(indexFirstBracket + 1, indexSecondBracket);
+
+				newLine = newLine.replace(delimiter, ",");
+
+			}
 			newLine = newLine.replace("\\n", ",");
-			newLine = newLine.replace(delimiter, ",");
 			numbersSplit = newLine.split(",");
 
 			if (numbersSplit.length == 0) {
