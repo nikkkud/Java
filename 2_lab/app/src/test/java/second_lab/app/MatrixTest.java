@@ -3,8 +3,6 @@ package second_lab.app;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import second_lab.Matrix;
-
 public class MatrixTest {
 
 	@Test

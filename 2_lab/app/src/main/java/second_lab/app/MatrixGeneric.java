@@ -4,8 +4,6 @@ import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
-import second_lab.Matrix;
-
 public class MatrixGeneric<T> {
 	private int column;
 	private int row;

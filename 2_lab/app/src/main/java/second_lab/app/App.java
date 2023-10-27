@@ -3,7 +3,6 @@
  */
 package second_lab.app;
 
-import second_lab.Matrix;
 import second_lab.list.LinkedList;
 
 import static second_lab.utilities.StringUtils.join;

@@ -1,4 +1,4 @@
-package second_lab;
+package second_lab.app;
 
 import java.util.Arrays;
 import java.util.Random;
