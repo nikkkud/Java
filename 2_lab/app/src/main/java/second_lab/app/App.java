@@ -3,19 +3,42 @@
  */
 package second_lab.app;
 
+import second_lab.Matrix;
 import second_lab.list.LinkedList;
 
 import static second_lab.utilities.StringUtils.join;
 import static second_lab.utilities.StringUtils.split;
-import static second_lab.app.MessageUtils.getMessage;
+
+import java.util.Arrays;
 
 import org.apache.commons.text.WordUtils;
 
 public class App {
     public static void main(String[] args) {
-        LinkedList tokens;
-        tokens = split(getMessage());
-        String result = join(tokens);
-        System.out.println(WordUtils.capitalize(result));
+
+        // !Generic Matrix
+        Double[][] testint = { { 1.00, 2.00, 3.00 }, { 2.00, 3.00, 4.00 }, { 3.00, 76.34, 11.11 } };
+
+        MatrixGeneric<Double> gen = new MatrixGeneric<Double>(testint);
+
+        Double[] testgen = new Double[gen.getRow()];
+
+        testgen = gen.getRowElems(3);
+
+        System.out.println(Arrays.toString(testgen));
+
+        System.out.println(" ");
+
+        // !Matrix
+        double[][] mat = { { 1.00, 2.00, 3.00 }, { 2.00, 3.00, 4.00 }, { 3.00, 76.34, 11.11 } };
+
+        Matrix matrixManual = new Matrix(mat);
+
+        matrixManual.getMatrix();
+
+        Matrix testrand = Matrix.randomColumnMatrix(4);
+
+        testrand.getMatrix();
+
     }
 }
