@@ -281,17 +281,14 @@ public class Matrix {
 
 	public static Matrix inverse(Matrix other) {
 		int n = other.row;
-		Matrix identityMatrix = new Matrix(n, n);
-		Matrix augmentedMatrix = new Matrix(n, 2 * n);
-
-		// double[][] identityMatrix = new double[n][n];
-		// double[][] augmentedMatrix = new double[n][2 * n];
+		Matrix idMatrix = new Matrix(n, n);
+		Matrix auMatrix = new Matrix(n, 2 * n);
 
 		for (int i = 0; i < n; i++) {
 			for (int j = 0; j < n; j++) {
-				augmentedMatrix.matrix[i][j] = other.matrix[i][j];
-				identityMatrix.matrix[i][j] = (i == j) ? 1.0 : 0.0;
-				augmentedMatrix.matrix[i][j + n] = identityMatrix.matrix[i][j];
+				auMatrix.matrix[i][j] = other.matrix[i][j];
+				idMatrix.matrix[i][j] = (i == j) ? 1.0 : 0.0;
+				auMatrix.matrix[i][j + n] = idMatrix.matrix[i][j];
 			}
 		}
 
@@ -299,25 +296,25 @@ public class Matrix {
 
 			int pivotRow = i;
 			for (int j = i + 1; j < n; j++) {
-				if (Math.abs(augmentedMatrix.matrix[j][i]) > Math.abs(augmentedMatrix.matrix[pivotRow][i])) {
+				if (Math.abs(auMatrix.matrix[j][i]) > Math.abs(auMatrix.matrix[pivotRow][i])) {
 					pivotRow = j;
 				}
 			}
 
-			double[] tempRow = augmentedMatrix.matrix[i];
-			augmentedMatrix.matrix[i] = augmentedMatrix.matrix[pivotRow];
-			augmentedMatrix.matrix[pivotRow] = tempRow;
+			double[] tRow = auMatrix.matrix[i];
+			auMatrix.matrix[i] = auMatrix.matrix[pivotRow];
+			auMatrix.matrix[pivotRow] = tRow;
 
-			double pivotElement = augmentedMatrix.matrix[i][i];
+			double pivotElem = auMatrix.matrix[i][i];
 			for (int j = 0; j < 2 * n; j++) {
-				augmentedMatrix.matrix[i][j] /= pivotElement;
+				auMatrix.matrix[i][j] /= pivotElem;
 			}
 
 			for (int j = 0; j < n; j++) {
 				if (j != i) {
-					double factor = augmentedMatrix.matrix[j][i];
+					double factor = auMatrix.matrix[j][i];
 					for (int k = 0; k < 2 * n; k++) {
-						augmentedMatrix.matrix[j][k] -= factor * augmentedMatrix.matrix[i][k];
+						auMatrix.matrix[j][k] -= factor * auMatrix.matrix[i][k];
 					}
 				}
 			}
@@ -326,7 +323,7 @@ public class Matrix {
 		Matrix inverse = new Matrix(n, n);
 		for (int i = 0; i < n; i++) {
 			for (int j = 0; j < n; j++) {
-				inverse.matrix[i][j] = augmentedMatrix.matrix[i][j + n];
+				inverse.matrix[i][j] = auMatrix.matrix[i][j + n];
 			}
 		}
 
