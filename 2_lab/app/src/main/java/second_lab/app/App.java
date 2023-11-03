@@ -15,29 +15,16 @@ import org.apache.commons.text.WordUtils;
 public class App {
     public static void main(String[] args) {
 
-        // !Generic Matrix
-        Double[][] testint = { { 1.00, 2.00, 3.00 }, { 2.00, 3.00, 4.00 }, { 3.00, 76.34, 11.11 } };
+        double[][] ar = { { 0.00, 2.00, 5.00 }, { 3.21, 0.00, -7.00 }, { 76.34, 1.1, 0.00 } };
 
-        MatrixGeneric<Double> gen = new MatrixGeneric<Double>(testint);
+        Matrix standart = new Matrix(ar);
+        standart.getMatrix();
 
-        Double[] testgen = new Double[gen.getRow()];
+        Matrix inverse = Matrix.inverse(standart);
+        inverse.getMatrix();
 
-        testgen = gen.getRowElems(3);
-
-        System.out.println(Arrays.toString(testgen));
-
-        System.out.println(" ");
-
-        // !Matrix
-        double[][] mat = { { 1.00, 2.00, 3.00 }, { 2.00, 3.00, 4.00 }, { 3.00, 76.34, 11.11 } };
-
-        Matrix matrixManual = new Matrix(mat);
-
-        matrixManual.getMatrix();
-
-        Matrix testrand = Matrix.randomColumnMatrix(4);
-
-        testrand.getMatrix();
+        Matrix indent = inverse.multiply(standart);
+        indent.getMatrix();
 
     }
 }

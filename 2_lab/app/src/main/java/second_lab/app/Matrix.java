@@ -1,5 +1,6 @@
 package second_lab.app;
 
+import java.text.DecimalFormat;
 import java.util.Arrays;
 import java.util.Random;
 import java.util.Scanner;
@@ -203,25 +204,6 @@ public class Matrix {
 		return result;
 	}
 
-	public Matrix multiply(Matrix other) {
-		if (this.column != other.row) {
-			throw new IllegalArgumentException(
-					"Кількість стовпців першої матриці має дорівнювати кількості рядків другої матриці");
-		}
-
-		Matrix result = new Matrix(this.row, other.column);
-		for (int i = 0; i < this.row; i++) {
-			for (int j = 0; j < other.column; j++) {
-				int sum = 0;
-				for (int k = 0; k < this.column; k++) {
-					sum += this.matrix[i][k] * other.matrix[k][j];
-				}
-				result.matrix[i][j] = sum;
-			}
-		}
-		return result;
-	}
-
 	public Matrix transpose() {
 		Matrix result = new Matrix(this.column, this.row);
 		for (int i = 0; i < this.row; i++) {
@@ -267,36 +249,75 @@ public class Matrix {
 		return result;
 	}
 
-	public Matrix inverseMatrix() {
-		if (row != column) {
-			throw new IllegalArgumentException("Матриця не є квадратною, обернена матриця не може бути обчислена");
+	public Matrix multiply(Matrix other) {
+		int n = this.row;
+		int m = other.column;
+		int p = other.row;
+
+		if (m != p) {
+			throw new IllegalArgumentException(
+					"The number of columns in matrix A must be equal to the number of rows in matrix B");
 		}
 
-		int n = row;
+		Matrix result = new Matrix(n, m);
+
+		for (int i = 0; i < n; i++) {
+			for (int j = 0; j < m; j++) {
+				result.matrix[i][j] = 0;
+				for (int k = 0; k < p; k++) {
+					result.matrix[i][j] += this.matrix[i][k] * other.matrix[k][j];
+				}
+			}
+		}
+
+		for (int i = 0; i < n; i++) {
+			for (int j = 0; j < m; j++) {
+				double num = result.matrix[i][j];
+				result.matrix[i][j] = Math.round(num * 100.0) / 100.0;
+			}
+		}
+		return result;
+	}
+
+	public static Matrix inverse(Matrix other) {
+		int n = other.row;
+		Matrix identityMatrix = new Matrix(n, n);
 		Matrix augmentedMatrix = new Matrix(n, 2 * n);
-		Matrix identityMatrix = Matrix.identityMatrix(n);
+
+		// double[][] identityMatrix = new double[n][n];
+		// double[][] augmentedMatrix = new double[n][2 * n];
 
 		for (int i = 0; i < n; i++) {
 			for (int j = 0; j < n; j++) {
-				augmentedMatrix.matrix[i][j] = matrix[i][j];
+				augmentedMatrix.matrix[i][j] = other.matrix[i][j];
+				identityMatrix.matrix[i][j] = (i == j) ? 1.0 : 0.0;
 				augmentedMatrix.matrix[i][j + n] = identityMatrix.matrix[i][j];
 			}
 		}
 
 		for (int i = 0; i < n; i++) {
-			double pivot = augmentedMatrix.matrix[i][i];
-			if (pivot == 0) {
-				throw new IllegalArgumentException("Матриця не має оберненої матриці");
-			}
-			for (int j = 0; j < 2 * n; j++) {
-				augmentedMatrix.matrix[i][j] /= pivot;
+
+			int pivotRow = i;
+			for (int j = i + 1; j < n; j++) {
+				if (Math.abs(augmentedMatrix.matrix[j][i]) > Math.abs(augmentedMatrix.matrix[pivotRow][i])) {
+					pivotRow = j;
+				}
 			}
 
-			for (int k = 0; k < n; k++) {
-				if (k != i) {
-					double factor = augmentedMatrix.matrix[k][i];
-					for (int j = 0; j < 2 * n; j++) {
-						augmentedMatrix.matrix[k][j] -= factor * augmentedMatrix.matrix[i][j];
+			double[] tempRow = augmentedMatrix.matrix[i];
+			augmentedMatrix.matrix[i] = augmentedMatrix.matrix[pivotRow];
+			augmentedMatrix.matrix[pivotRow] = tempRow;
+
+			double pivotElement = augmentedMatrix.matrix[i][i];
+			for (int j = 0; j < 2 * n; j++) {
+				augmentedMatrix.matrix[i][j] /= pivotElement;
+			}
+
+			for (int j = 0; j < n; j++) {
+				if (j != i) {
+					double factor = augmentedMatrix.matrix[j][i];
+					for (int k = 0; k < 2 * n; k++) {
+						augmentedMatrix.matrix[j][k] -= factor * augmentedMatrix.matrix[i][k];
 					}
 				}
 			}
@@ -311,4 +332,9 @@ public class Matrix {
 
 		return inverse;
 	}
+
+	public void setElemMatrix(int row, int column, double digit) {
+		this.matrix[row - 1][column - 1] = digit;
+	}
+
 }

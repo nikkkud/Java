@@ -21,6 +21,18 @@ public final class ImmutableMatrix {
 		this.matrix = new double[this.row][this.column];
 	}
 
+	public ImmutableMatrix(double[][] array) {
+		this.row = array.length;
+		this.column = array[0].length;
+		this.matrix = new double[row][column];
+
+		for (int i = 0; i < row; i++) {
+			for (int j = 0; j < column; j++) {
+				matrix[i][j] = array[i][j];
+			}
+		}
+	}
+
 	public ImmutableMatrix(ImmutableMatrix matrixClone) {
 		int matrixLength = matrixClone.matrix.length;
 
