@@ -279,10 +279,71 @@ public class Matrix {
 		return result;
 	}
 
+	private Matrix minorMatrix(int row, int col) {
+		if (row < 0 || row >= this.row || col < 0 || col >= this.column) {
+			throw new IllegalArgumentException("Недійсні індекси рядка або стовпця.");
+		}
+
+		Matrix minor = new Matrix(this.row - 1, this.column - 1);
+
+		int m = 0;
+		int n;
+
+		for (int i = 0; i < this.row; i++) {
+			if (i == row) {
+				continue;
+			}
+			n = 0;
+			for (int j = 0; j < this.column; j++) {
+				if (j == col) {
+					continue;
+				}
+				minor.matrix[m][n] = this.matrix[i][j];
+				n++;
+			}
+			m++;
+		}
+
+		return minor;
+	}
+
+	private static double determinant(Matrix matrix) {
+
+		if (matrix.row != matrix.column) {
+
+			throw new IllegalArgumentException("Матриця не є квадратною");
+		}
+
+		int n = matrix.row;
+		if (n == 1) {
+
+			return matrix.matrix[0][0];
+		}
+
+		if (n == 2) {
+
+			return matrix.matrix[0][0] * matrix.matrix[1][1] - matrix.matrix[0][1] * matrix.matrix[1][0];
+		}
+
+		double det = 0;
+		for (int i = 0; i < n; i++) {
+
+			det += matrix.matrix[0][i] * Math.pow(-1, i) * determinant(matrix.minorMatrix(0, i));
+		}
+
+		return det;
+	}
+
 	public static Matrix inverse(Matrix other) {
 		int n = other.row;
 		Matrix idMatrix = new Matrix(n, n);
 		Matrix auMatrix = new Matrix(n, 2 * n);
+		double determinant = Matrix.determinant(other);
+
+		if (determinant == 0) {
+			throw new IllegalArgumentException("Матриця вироджена");
+
+		}
 
 		for (int i = 0; i < n; i++) {
 			for (int j = 0; j < n; j++) {

@@ -15,7 +15,7 @@ import org.apache.commons.text.WordUtils;
 public class App {
     public static void main(String[] args) {
 
-        double[][] ar = { { 0.00, 2.00, 5.00 }, { 3.21, 0.00, -7.00 }, { 76.34, 1.1, 0.00 } };
+        double[][] ar = { { 0.00, 2.00, 3.00 }, { 4.00, 50.00, 6.00 }, { 70.00, 80.00, 0.00 } };
 
         Matrix standart = new Matrix(ar);
         standart.getMatrix();

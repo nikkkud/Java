@@ -187,19 +187,30 @@ public final class ImmutableMatrix {
 	}
 
 	public ImmutableMatrix multiply(ImmutableMatrix other) {
-		if (this.column != other.row) {
+		int n = this.row;
+		int m = other.column;
+		int p = other.row;
+
+		if (m != p) {
 			throw new IllegalArgumentException(
-					"Кількість стовпців першої матриці має дорівнювати кількості рядків другої матриці");
+					"The number of columns in matrix A must be equal to the number of rows in matrix B");
 		}
 
-		ImmutableMatrix result = new ImmutableMatrix(this.row, other.column);
-		for (int i = 0; i < this.row; i++) {
-			for (int j = 0; j < other.column; j++) {
-				int sum = 0;
-				for (int k = 0; k < this.column; k++) {
-					sum += this.matrix[i][k] * other.matrix[k][j];
+		ImmutableMatrix result = new ImmutableMatrix(n, m);
+
+		for (int i = 0; i < n; i++) {
+			for (int j = 0; j < m; j++) {
+				result.matrix[i][j] = 0;
+				for (int k = 0; k < p; k++) {
+					result.matrix[i][j] += this.matrix[i][k] * other.matrix[k][j];
 				}
-				result.matrix[i][j] = sum;
+			}
+		}
+
+		for (int i = 0; i < n; i++) {
+			for (int j = 0; j < m; j++) {
+				double num = result.matrix[i][j];
+				result.matrix[i][j] = Math.round(num * 100.0) / 100.0;
 			}
 		}
 		return result;
@@ -250,36 +261,103 @@ public final class ImmutableMatrix {
 		return result;
 	}
 
-	public ImmutableMatrix inverseMatrix() {
-		if (row != column) {
-			throw new IllegalArgumentException("Матриця не є квадратною, обернена матриця не може бути обчислена");
+	private ImmutableMatrix minorMatrix(int row, int col) {
+		if (row < 0 || row >= this.row || col < 0 || col >= this.column) {
+			throw new IllegalArgumentException("Недійсні індекси рядка або стовпця.");
 		}
 
-		int n = row;
-		ImmutableMatrix augmentedMatrix = new ImmutableMatrix(n, 2 * n);
-		ImmutableMatrix identityMatrix = ImmutableMatrix.identityMatrix(n);
+		ImmutableMatrix minor = new ImmutableMatrix(this.row - 1, this.column - 1);
+
+		int m = 0;
+		int n;
+
+		for (int i = 0; i < this.row; i++) {
+			if (i == row) {
+				continue;
+			}
+			n = 0;
+			for (int j = 0; j < this.column; j++) {
+				if (j == col) {
+					continue;
+				}
+				minor.matrix[m][n] = this.matrix[i][j];
+				n++;
+			}
+			m++;
+		}
+
+		return minor;
+	}
+
+	private static double determinant(ImmutableMatrix matrix) {
+
+		if (matrix.row != matrix.column) {
+
+			throw new IllegalArgumentException("Матриця не є квадратною");
+		}
+
+		int n = matrix.row;
+		if (n == 1) {
+
+			return matrix.matrix[0][0];
+		}
+
+		if (n == 2) {
+
+			return matrix.matrix[0][0] * matrix.matrix[1][1] - matrix.matrix[0][1] * matrix.matrix[1][0];
+		}
+
+		double det = 0;
+		for (int i = 0; i < n; i++) {
+
+			det += matrix.matrix[0][i] * Math.pow(-1, i) * determinant(matrix.minorMatrix(0, i));
+		}
+
+		return det;
+	}
+
+	public static ImmutableMatrix inverse(ImmutableMatrix other) {
+		int n = other.row;
+		ImmutableMatrix idMatrix = new ImmutableMatrix(n, n);
+		ImmutableMatrix auMatrix = new ImmutableMatrix(n, 2 * n);
+		double determinant = ImmutableMatrix.determinant(other);
+
+		if (determinant == 0) {
+			throw new IllegalArgumentException("Матриця вироджена");
+
+		}
 
 		for (int i = 0; i < n; i++) {
 			for (int j = 0; j < n; j++) {
-				augmentedMatrix.matrix[i][j] = matrix[i][j];
-				augmentedMatrix.matrix[i][j + n] = identityMatrix.matrix[i][j];
+				auMatrix.matrix[i][j] = other.matrix[i][j];
+				idMatrix.matrix[i][j] = (i == j) ? 1.0 : 0.0;
+				auMatrix.matrix[i][j + n] = idMatrix.matrix[i][j];
 			}
 		}
 
 		for (int i = 0; i < n; i++) {
-			double pivot = augmentedMatrix.matrix[i][i];
-			if (pivot == 0) {
-				throw new IllegalArgumentException("Матриця не має оберненої матриці");
-			}
-			for (int j = 0; j < 2 * n; j++) {
-				augmentedMatrix.matrix[i][j] /= pivot;
+
+			int pivotRow = i;
+			for (int j = i + 1; j < n; j++) {
+				if (Math.abs(auMatrix.matrix[j][i]) > Math.abs(auMatrix.matrix[pivotRow][i])) {
+					pivotRow = j;
+				}
 			}
 
-			for (int k = 0; k < n; k++) {
-				if (k != i) {
-					double factor = augmentedMatrix.matrix[k][i];
-					for (int j = 0; j < 2 * n; j++) {
-						augmentedMatrix.matrix[k][j] -= factor * augmentedMatrix.matrix[i][j];
+			double[] tRow = auMatrix.matrix[i];
+			auMatrix.matrix[i] = auMatrix.matrix[pivotRow];
+			auMatrix.matrix[pivotRow] = tRow;
+
+			double pivotElem = auMatrix.matrix[i][i];
+			for (int j = 0; j < 2 * n; j++) {
+				auMatrix.matrix[i][j] /= pivotElem;
+			}
+
+			for (int j = 0; j < n; j++) {
+				if (j != i) {
+					double factor = auMatrix.matrix[j][i];
+					for (int k = 0; k < 2 * n; k++) {
+						auMatrix.matrix[j][k] -= factor * auMatrix.matrix[i][k];
 					}
 				}
 			}
@@ -288,7 +366,7 @@ public final class ImmutableMatrix {
 		ImmutableMatrix inverse = new ImmutableMatrix(n, n);
 		for (int i = 0; i < n; i++) {
 			for (int j = 0; j < n; j++) {
-				inverse.matrix[i][j] = augmentedMatrix.matrix[i][j + n];
+				inverse.matrix[i][j] = auMatrix.matrix[i][j + n];
 			}
 		}
 
