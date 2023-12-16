@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="org.fpm.di.example.Example" tests="1" skipped="0" failures="0" errors="0" timestamp="2023-12-16T08:59:25" hostname="MacBook-Pro.local" time="0.003">
+  <properties/>
+  <testcase name="shouldInjectSingleton" classname="org.fpm.di.example.Example" time="0.003"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>
